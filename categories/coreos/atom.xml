@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Coreos | blazed's tech blog]]></title>
+  <link href="http://blazed.github.io/categories/coreos/atom.xml" rel="self"/>
+  <link href="http://blazed.github.io/"/>
+  <updated>2015-02-06T21:12:22+01:00</updated>
+  <id>http://blazed.github.io/</id>
+  <author>
+    <name><![CDATA[blazed]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CoreOS, Iptables and Vulcand]]></title>
+    <link href="http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand/"/>
+    <updated>2015-02-06T20:26:07+01:00</updated>
+    <id>http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand</id>
+    <content type="html"><![CDATA[<p>Since a fresh install of CoreOS comes without any iptables rules you&rsquo;ll have to
+write them yourself.</p>
+
+<p>So in order to secure it we&rsquo;ll have to add there rules, in the example below we
+starts iptables and enable incoming trafic to port 22, 80 and 443. The rest is
+rejected. However vulcand kept failing to forward the traffic without the &ldquo;-A INPUT -i docker0 -j
+ACCEPT&rdquo; part, it can probably be written better or different. These rules also
+allows the containers to get access to <em>etcd</em>.</p>
+
+<p><figure class='code'><figcaption><span>user_data.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;h1&gt;cloud-config&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;hr /&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;coreos</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">units</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">iptables-restore.service</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">enable</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;write_files</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/var/lib/iptables/rules-save</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">permissions</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0644</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">owner</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root:root</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">content</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
+</span><span class='line'>    <span class="no">*filter</span>
+</span><span class='line'>    <span class="no">:INPUT DROP [0:0]</span>
+</span><span class='line'>    <span class="no">:FORWARD DROP [0:0]</span>
+</span><span class='line'>    <span class="no">:OUTPUT ACCEPT [0:0]</span>
+</span><span class='line'>    <span class="no">-A INPUT -i lo -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -i eth1 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -i docker0 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -m conntrack &amp;ndash;ctstate RELATED,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp &amp;ndash;dport 22 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp &amp;ndash;dport 80 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp &amp;ndash;dport 443 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp &amp;ndash;icmp-type 0 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp &amp;ndash;icmp-type 3 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp &amp;ndash;icmp-type 11 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A FORWARD -i docker0 -o eth1 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A FORWARD -o docker0 -i eth1 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT  -i docker0 -p tcp &amp;ndash;dport 4001 -m state &amp;ndash;state NEW,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A OUTPUT -o docker0 -p tcp &amp;ndash;sport 4001 -m state &amp;ndash;state ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp &amp;ndash;dport 4001 -m state &amp;ndash;state NEW,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp &amp;ndash;sport 4001 -m state &amp;ndash;state ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp &amp;ndash;dport 4001 -m state &amp;ndash;state NEW,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp &amp;ndash;sport 4001 -m state &amp;ndash;state ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">COMMIT</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Here&rsquo;s a little explanation what the rules does:</p>
+
+<ul>
+<li>Allow all input to localhost</li>
+<li>Allow all input on the private network (eth1 in this case)</li>
+<li>Allow incoming TCP traffic on ports 22, 80 and 443</li>
+<li>Allow TCP traffic on port 4001 via docker0</li>
+<li>Drops all other incoming traffic</li>
+<li>Drops all traffic attemting to forward through the network, except via docker0</li>
+<li>Allow all outbound traffic</li>
+</ul>
+
+
+<p>These rules will be added on every boot. To verify the configuration run
+<code>sudo iptables -nvL</code>.</p>
+
+<p>That&rsquo;s it! At the moment we don&rsquo;t use any other rules.</p>
+]]></content>
+  </entry>
+  
+</feed>
