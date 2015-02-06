@@ -33,6 +33,18 @@ write them yourself. So in order to secure it we&rsquo;ll have &hellip;">
 <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39505466-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -43,18 +55,15 @@ write them yourself. So in order to secure it we&rsquo;ll have &hellip;">
 </hgroup>
 
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  <nav role="navigation">
   
-</ul>
+    <form method="get" action="/search.html">
+      <fieldset role="search">
+        <input class="search" name="query" type="text" placeholder="Search..." x-webkit-speech />
+      </fieldset>
+    </form>
   
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="blazed.github.io">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
+
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/archives">Archives</a></li>
@@ -96,99 +105,12 @@ rejected. However vulcand kept failing to forward the traffic without the &ldquo
 ACCEPT&rdquo; part, it can probably be written better or different. These rules also
 allows the containers to get access to <em>etcd</em>.</p>
 
-<figure class='code'><figcaption><span>user_data.yml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">#cloud-config</span>
-</span><span class='line'><span class="nn">---</span>
-</span><span class='line'><span class="l-Scalar-Plain">coreos</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">units</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">iptables-restore.service</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">enable</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">write_files</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/var/lib/iptables/rules-save</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">permissions</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0644</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">owner</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root:root</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">content</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
-</span><span class='line'>    <span class="no">*filter</span>
-</span><span class='line'>    <span class="no">:INPUT DROP [0:0]</span>
-</span><span class='line'>    <span class="no">:FORWARD DROP [0:0]</span>
-</span><span class='line'>    <span class="no">:OUTPUT ACCEPT [0:0]</span>
-</span><span class='line'>    <span class="no">-A INPUT -i lo -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -i eth1 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -i docker0 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp --dport 443 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp --icmp-type 0 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp --icmp-type 3 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp --icmp-type 11 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A FORWARD -i docker0 -o eth1 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A FORWARD -o docker0 -i eth1 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT  -i docker0 -p tcp --dport 4001 -m state --state NEW,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A OUTPUT -o docker0 -p tcp --sport 4001 -m state --state ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp --dport 4001 -m state --state NEW,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp --sport 4001 -m state --state ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp --dport 4001 -m state --state NEW,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp --sport 4001 -m state --state ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">COMMIT</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here&rsquo;s a little explanation what the rules does:</p>
-
-<ul>
-<li>Allow all input to localhost</li>
-<li>Allow all input on the private network (eth1 in this case)</li>
-<li>Allow incoming TCP traffic on ports 22, 80 and 443</li>
-<li>Allow TCP traffic on port 4001 via docker0</li>
-<li>Drops all other incoming traffic</li>
-<li>Drops all traffic attemting to forward through the network, except via docker0</li>
-<li>Allow all outbound traffic</li>
-</ul>
-
-
-<p>These rules will be added on every boot. To verify the configuration run
-<code>sudo iptables -nvL</code>.</p>
-
-<p>That&rsquo;s it! At the moment we don&rsquo;t use any other rules.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/2015/02/06/coreos-iptables-and-vulcand/">Read on</a>
+    </footer>
   
 
 
@@ -196,7 +118,6 @@ allows the containers to get access to <em>etcd</em>.</p>
   
   <div class="pagination">
     
-    <a href="/blog/archives">Blog Archives</a>
     
   </div>
 </div>
@@ -229,6 +150,19 @@ allows the containers to get access to <em>etcd</em>.</p>
 
 </footer>
   
+
+<script type="text/javascript">
+      var disqus_shortname = 'darkstarblog';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 

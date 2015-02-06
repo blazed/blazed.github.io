@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Vulcand | blazed's tech blog]]></title>
-  <link href="http://blazed.github.io/categories/vulcand/atom.xml" rel="self"/>
+  <title><![CDATA[blazed's tech blog]]></title>
+  <link href="http://blazed.github.io/atom.xml" rel="self"/>
   <link href="http://blazed.github.io/"/>
   <updated>2015-02-06T21:45:27+01:00</updated>
   <id>http://blazed.github.io/</id>
@@ -14,7 +14,8 @@
 
   
   <entry>
-    <title type="html"><![CDATA[CoreOS, Iptables and Vulcand]]></title>
+    <title type="html"><![CDATA[CoreOS, iptables and vulcand]]></title>
+    <summary><![CDATA[]]></summary>
     <link href="http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand/"/>
     <updated>2015-02-06T20:26:07+01:00</updated>
     <id>http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand</id>
@@ -30,7 +31,9 @@ allows the containers to get access to <em>etcd</em>.</p>
 <!--more-->
 
 
-<p><figure class='code'><figcaption><span>user_data.yml </span></figcaption>
+
+
+<figure class='code'><figcaption><span>user_data.yml </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -66,22 +69,14 @@ allows the containers to get access to <em>etcd</em>.</p>
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;h1&gt;cloud-config&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;hr /&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;coreos</span><span class="p-Indicator">:</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">#cloud-config</span>
+</span><span class='line'><span class="nn">---</span>
+</span><span class='line'><span class="l-Scalar-Plain">coreos</span><span class="p-Indicator">:</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">units</span><span class="p-Indicator">:</span>
 </span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">iptables-restore.service</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">enable</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true&lt;/p&gt;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">enable</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
 </span><span class='line'>
-</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;write_files</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">write_files</span><span class="p-Indicator">:</span>
 </span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/var/lib/iptables/rules-save</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">permissions</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0644</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">owner</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root:root</span>
@@ -93,23 +88,24 @@ allows the containers to get access to <em>etcd</em>.</p>
 </span><span class='line'>    <span class="no">-A INPUT -i lo -j ACCEPT</span>
 </span><span class='line'>    <span class="no">-A INPUT -i eth1 -j ACCEPT</span>
 </span><span class='line'>    <span class="no">-A INPUT -i docker0 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -m conntrack &amp;ndash;ctstate RELATED,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp &amp;ndash;dport 22 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp &amp;ndash;dport 80 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp &amp;ndash;dport 443 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp &amp;ndash;icmp-type 0 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp &amp;ndash;icmp-type 3 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp &amp;ndash;icmp-type 11 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p tcp -m tcp --dport 443 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp --icmp-type 0 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp --icmp-type 3 -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT -p icmp -m icmp --icmp-type 11 -j ACCEPT</span>
 </span><span class='line'>    <span class="no">-A FORWARD -i docker0 -o eth1 -j ACCEPT</span>
 </span><span class='line'>    <span class="no">-A FORWARD -o docker0 -i eth1 -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT  -i docker0 -p tcp &amp;ndash;dport 4001 -m state &amp;ndash;state NEW,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A OUTPUT -o docker0 -p tcp &amp;ndash;sport 4001 -m state &amp;ndash;state ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp &amp;ndash;dport 4001 -m state &amp;ndash;state NEW,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp &amp;ndash;sport 4001 -m state &amp;ndash;state ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp &amp;ndash;dport 4001 -m state &amp;ndash;state NEW,ESTABLISHED -j ACCEPT</span>
-</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp &amp;ndash;sport 4001 -m state &amp;ndash;state ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT  -i docker0 -p tcp --dport 4001 -m state --state NEW,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A OUTPUT -o docker0 -p tcp --sport 4001 -m state --state ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp --dport 4001 -m state --state NEW,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp --sport 4001 -m state --state ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A INPUT  -i eth1 -p tcp --dport 4001 -m state --state NEW,ESTABLISHED -j ACCEPT</span>
+</span><span class='line'>    <span class="no">-A OUTPUT -o eth1 -p tcp --sport 4001 -m state --state ESTABLISHED -j ACCEPT</span>
 </span><span class='line'>    <span class="no">COMMIT</span>
-</span></code></pre></td></tr></table></div></figure></p>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Here&rsquo;s a little explanation what the rules does:</p>
 

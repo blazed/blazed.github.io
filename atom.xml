@@ -4,7 +4,7 @@
   <title><![CDATA[blazed's tech blog]]></title>
   <link href="http://blazed.github.io/atom.xml" rel="self"/>
   <link href="http://blazed.github.io/"/>
-  <updated>2015-02-06T21:21:02+01:00</updated>
+  <updated>2015-02-06T21:45:27+01:00</updated>
   <id>http://blazed.github.io/</id>
   <author>
     <name><![CDATA[blazed]]></name>
@@ -26,6 +26,11 @@ starts iptables and enable incoming trafic to port 22, 80 and 443. The rest is
 rejected. However vulcand kept failing to forward the traffic without the &ldquo;-A INPUT -i docker0 -j
 ACCEPT&rdquo; part, it can probably be written better or different. These rules also
 allows the containers to get access to <em>etcd</em>.</p>
+
+<!--more-->
+
+
+
 
 <figure class='code'><figcaption><span>user_data.yml </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
