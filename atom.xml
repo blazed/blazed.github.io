@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[blazed's tech blog]]></title>
-  <link href="http://blazed.github.io/atom.xml" rel="self"/>
-  <link href="http://blazed.github.io/"/>
-  <updated>2015-02-06T22:08:55+01:00</updated>
-  <id>http://blazed.github.io/</id>
+  <link href="http://darkstar.se/atom.xml" rel="self"/>
+  <link href="http://darkstar.se/"/>
+  <updated>2015-02-06T22:24:34+01:00</updated>
+  <id>http://darkstar.se/</id>
   <author>
     <name><![CDATA[blazed]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[CoreOS, Iptables and Vulcand]]></title>
-    <link href="http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand/"/>
+    <link href="http://darkstar.se/2015/02/06/coreos-iptables-and-vulcand/"/>
     <updated>2015-02-06T20:26:07+01:00</updated>
-    <id>http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand</id>
+    <id>http://darkstar.se/2015/02/06/coreos-iptables-and-vulcand</id>
     <content type="html"><![CDATA[<p>Since a fresh install of CoreOS comes without any iptables rules you&rsquo;ll have to
 write them yourself.</p>
 

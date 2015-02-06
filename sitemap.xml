@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://blazed.github.io/2015/02/06/coreos-iptables-and-vulcand/</loc>
+    <loc>http://darkstar.se/2015/02/06/coreos-iptables-and-vulcand/</loc>
     <lastmod>2015-02-06T20:26:07+01:00</lastmod>
   </url>
   <url>
-    <loc>http://blazed.github.io/</loc>
-    <lastmod>2015-02-06T22:08:55+01:00</lastmod>
+    <loc>http://darkstar.se/</loc>
+    <lastmod>2015-02-06T22:24:34+01:00</lastmod>
   </url>
   <url>
-    <loc>http://blazed.github.io/archives/</loc>
-    <lastmod>2015-02-06T22:08:55+01:00</lastmod>
+    <loc>http://darkstar.se/archives/</loc>
+    <lastmod>2015-02-06T22:24:34+01:00</lastmod>
   </url>
   <url>
-    <loc>http://blazed.github.io/search.html</loc>
-    <lastmod>2015-02-06T22:08:55+01:00</lastmod>
+    <loc>http://darkstar.se/search.html</loc>
+    <lastmod>2015-02-06T22:24:34+01:00</lastmod>
   </url>
 </urlset>

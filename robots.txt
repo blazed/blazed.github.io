@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://blazed.github.io/sitemap.xml 
+Sitemap: http://darkstar.se/sitemap.xml 
