@@ -1,0 +1,16 @@
+baseurl = "http://darkstar.se/"
+languageCode = "en-us"
+title = "darkstar"
+
+[params]
+  author = "Boberg"
+  googleAnalytics = "UA-39505466-1"
+  favicon = "favicon.png"
+
+[[menu.main]]
+  name = "Home"
+  url = "/"
+
+[[menu.main]]
+  name = "About"
+  url = "/about"
