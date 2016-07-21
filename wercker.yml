@@ -1,0 +1,9 @@
+box: node:4.2.6-slim
+
+build:
+  steps:
+    - npm-install
+    - script:
+      name: build
+      code: |
+        npm run build
